@@ -13,18 +13,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {
-    @JsonProperty("id")
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @JsonProperty("name")
     private String name;
-    @JsonProperty("price")
+
     private Double price;
 
-    @JsonProperty("create_at")
     @Column(name = "create_at", updatable = false)
     private LocalDateTime createAt;
+
 
     @PrePersist
     protected void onCreate() {
