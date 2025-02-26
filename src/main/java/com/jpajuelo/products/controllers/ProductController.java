@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 @RestController
 @RequestMapping("/Products")
-public class ProductController {
+public class  ProductController {
     private final ProductService productService;
 
     public ProductController(ProductService productService) {
@@ -32,7 +32,7 @@ public class ProductController {
     }
     @GetMapping("/ProductosMenores/{price}")
     public ResponseEntity<Optional<List<Product>>> getProductsMenoresA(@PathVariable("price") Double price) {
-        return ResponseEntity.ok(productService.findProductosMayoresA(price));
+        return ResponseEntity.ok(productService.findProductosMenoresA(price));
     }
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {

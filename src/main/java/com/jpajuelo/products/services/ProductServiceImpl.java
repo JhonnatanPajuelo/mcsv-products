@@ -4,29 +4,39 @@ import com.jpajuelo.products.entities.Product;
 import com.jpajuelo.products.repositories.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
+    private final Environment environment;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, Environment env) {
         this.productRepository = productRepository;
+        this.environment = env;
     }
 
     @Override
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productRepository.findAll().stream().map(product -> {
+            product.setPort(Integer.parseInt(environment.getProperty("local.server.port")));
+            return product;
+        }).collect(Collectors.toList());
     }
 
     @Override
     public Optional<Product> findById(Long id) {
-        return Optional.of(productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found")));
+        Product product = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found with id: " + id));
+        product.setPort(Integer.parseInt(environment.getProperty("local.server.port")));
+        return Optional.of(product);
     }
     @Override
     public Optional<List<Product>> findProductosMayoresA(Double price) {

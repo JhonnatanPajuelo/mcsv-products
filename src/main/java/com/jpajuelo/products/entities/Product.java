@@ -24,6 +24,8 @@ public class Product {
     @Column(name = "create_at", updatable = false)
     private LocalDateTime createAt;
 
+    @Transient
+    private int port;
 
     @PrePersist
     protected void onCreate() {
